@@ -1,4 +1,4 @@
-package Jeyson.AuthService;
+package JeysonAmadoA.AuthService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
