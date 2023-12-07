@@ -2,8 +2,7 @@ package JeysonAmadoA.AuthService.Entities.Users;
 
 import JeysonAmadoA.AuthService.Entities.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -11,6 +10,9 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Where(clause = "deleted_at is NULL")
 @Table(name = "users")
 @Data
@@ -25,13 +27,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "birth_day")
     private LocalDateTime birthDay;
 
-    @Column(name = "document_number")
-    private String documentNumber;
-
     @Column
     private String password;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -39,4 +38,5 @@ public class UserEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
+
 }

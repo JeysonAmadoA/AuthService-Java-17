@@ -13,8 +13,6 @@ public class UserDto {
 
     private LocalDateTime birthDay;
 
-    private String documentNumber;
-
     private String password;
 
     private String email;

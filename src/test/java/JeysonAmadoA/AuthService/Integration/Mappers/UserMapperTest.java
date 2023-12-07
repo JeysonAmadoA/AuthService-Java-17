@@ -29,7 +29,6 @@ public class UserMapperTest {
         userDto.setLastName("Amado");
         LocalDateTime date = LocalDateTime.now();
         userDto.setBirthDay(date);
-        userDto.setDocumentNumber("123456789");
         userDto.setPassword("password");
         userDto.setEmail("jeyson@example.com");
 
@@ -37,7 +36,6 @@ public class UserMapperTest {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getLastName(), user.getLastName());
         assertEquals(userDto.getBirthDay(), user.getBirthDay());
-        assertEquals(userDto.getDocumentNumber(), user.getDocumentNumber());
         assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getEmail(), user.getEmail());
     }
@@ -50,7 +48,6 @@ public class UserMapperTest {
         user.setLastName("Amado");
         LocalDateTime date = LocalDateTime.now();
         user.setBirthDay(date);
-        user.setDocumentNumber("123456789");
         user.setPassword("password");
         user.setEmail("jeyson@example.com");
 
@@ -58,7 +55,6 @@ public class UserMapperTest {
         assertEquals(user.getName(), userDto.getName());
         assertEquals(user.getLastName(), userDto.getLastName());
         assertEquals(user.getBirthDay(), userDto.getBirthDay());
-        assertEquals(user.getDocumentNumber(), userDto.getDocumentNumber());
         assertEquals(user.getPassword(), userDto.getPassword());
         assertEquals(user.getEmail(), userDto.getEmail());
     }
