@@ -1,4 +1,4 @@
-package JeysonAmadoA.AuthService.Integration.Mappers;
+package JeysonAmadoA.AuthService.Integration.Mappers.Users;
 
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @SpringBootTest
 public class UserMapperTest {
@@ -22,40 +22,56 @@ public class UserMapperTest {
     }
 
     @Test
-    public void UserDtoToEntityTest()
-    {
+    public void UserDtoToEntityTest() {
         UserDto userDto = new UserDto();
         userDto.setName("Jeyson");
         userDto.setLastName("Amado");
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         userDto.setBirthDay(date);
-        userDto.setPassword("password");
         userDto.setEmail("jeyson@example.com");
 
         UserEntity user = this.userMapper.toEntity(userDto);
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getLastName(), user.getLastName());
         assertEquals(userDto.getBirthDay(), user.getBirthDay());
-        assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getEmail(), user.getEmail());
     }
 
     @Test
-    public void UserEntityToDtoTest()
-    {
+    public void UserEntityToDtoTest() {
         UserEntity user = new UserEntity();
         user.setName("Jeyson");
         user.setLastName("Amado");
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         user.setBirthDay(date);
-        user.setPassword("password");
         user.setEmail("jeyson@example.com");
 
         UserDto userDto = this.userMapper.toDto(user);
         assertEquals(user.getName(), userDto.getName());
         assertEquals(user.getLastName(), userDto.getLastName());
         assertEquals(user.getBirthDay(), userDto.getBirthDay());
-        assertEquals(user.getPassword(), userDto.getPassword());
         assertEquals(user.getEmail(), userDto.getEmail());
+    }
+
+    @Test
+    public void updateEntityFromDtoTest() {
+        LocalDate date = LocalDate.now();
+
+        UserEntity user = new UserEntity();
+        user.setName("Mauro");
+        user.setLastName("Lombardo");
+        user.setBirthDay(date);
+        user.setEmail("mauro@example.com");
+
+        UserDto userDto = new UserDto();
+        userDto.setName("Jeyson");
+        userDto.setLastName("Amado");
+        userDto.setBirthDay(date);
+        userDto.setEmail("jeyson@example.com");
+
+        UserEntity userUpdated = this.userMapper.update(user, userDto);
+        assertEquals("Jeyson", userUpdated.getName());
+        assertEquals("Amado", userUpdated.getLastName());
+        assertEquals("jeyson@example.com", userUpdated.getEmail());
     }
 }

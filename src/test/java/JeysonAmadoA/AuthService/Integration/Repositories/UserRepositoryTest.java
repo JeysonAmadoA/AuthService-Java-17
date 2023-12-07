@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @DataJpaTest
@@ -33,7 +33,7 @@ public class UserRepositoryTest {
     @Rollback(value = false)
     public void saveUserTest() {
 
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
 
         UserEntity user = UserEntity.builder()
                 .name("Jeyson")

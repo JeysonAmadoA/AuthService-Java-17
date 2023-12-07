@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 
 public class UserEntityTest {
 
@@ -42,7 +41,7 @@ public class UserEntityTest {
     @Test
     public void getAgeTest(){
         UserEntity user = new UserEntity();
-        user.setBirthDay(LocalDateTime.of(1997,11,23,0,0));
+        user.setBirthDay(LocalDate.of(1997,11,23));
 
         assertThat(user.getAge()).isGreaterThanOrEqualTo(26);
     }

@@ -11,4 +11,10 @@ public class UserMapper extends BaseMapper<UserDto, UserEntity> {
     public UserMapper() {
         super(UserDto.class, UserEntity.class);
     }
+
+    public UserEntity update(UserEntity userEntity, UserDto userDto) {
+        this.modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(userDto, userEntity);
+        return userEntity;
+    }
 }

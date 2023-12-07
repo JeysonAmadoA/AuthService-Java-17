@@ -4,7 +4,7 @@ import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class UserDtoTest {
 
@@ -14,15 +14,13 @@ public class UserDtoTest {
         UserDto user = new UserDto();
         user.setName("Jeyson");
         user.setLastName("Amado");
-        LocalDateTime date = LocalDateTime.now();
+        LocalDate date = LocalDate.now();
         user.setBirthDay(date);
-        user.setPassword("password");
         user.setEmail("jeyson@example.com");
 
         assertEquals("Jeyson", user.getName());
         assertEquals("Amado", user.getLastName());
         assertEquals(date, user.getBirthDay());
-        assertEquals("password", user.getPassword());
         assertEquals("jeyson@example.com", user.getEmail());
     }
 }

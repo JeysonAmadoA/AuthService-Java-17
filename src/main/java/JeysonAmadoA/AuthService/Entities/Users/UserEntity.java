@@ -26,8 +26,8 @@ public class UserEntity extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "birth_day")
-    private LocalDateTime birthDay;
+    @Column(name = "birth_day", columnDefinition = "DATE")
+    private LocalDate birthDay;
 
     @Column
     private String password;
@@ -43,11 +43,9 @@ public class UserEntity extends BaseEntity {
 
     public int getAge(){
         LocalDateTime actualDateTime = LocalDateTime.now();
-
         LocalDate actualDate = actualDateTime.toLocalDate();
-        LocalDate birthDayDate = this.getBirthDay().toLocalDate();
 
-        return Period.between(birthDayDate, actualDate).getYears();
+        return Period.between(this.getBirthDay(), actualDate).getYears();
     }
 
 }

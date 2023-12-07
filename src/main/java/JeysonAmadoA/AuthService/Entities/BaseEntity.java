@@ -36,16 +36,28 @@ public abstract class BaseEntity implements Serializable {
 
     public void commitDelete(Long userId) {
         this.setUserWhoDeletedId(userId);
+        this.commitDelete();
+    }
+
+    public void commitDelete() {
         this.setDeletedAt(LocalDateTime.now()) ;
     }
 
     public void commitUpdate(Long userId) {
         this.setUserWhoUpdatedId(userId);
+        this.commitUpdate();
+    }
+
+    public void commitUpdate() {
         this.setUpdatedAt(LocalDateTime.now());
     }
 
     public void commitCreate(Long userId) {
         this.setUserWhoCreatedId(userId);
+        this.commitCreate();
+    }
+
+    public void commitCreate() {
         this.setCreatedAt(LocalDateTime.now());
     }
 
