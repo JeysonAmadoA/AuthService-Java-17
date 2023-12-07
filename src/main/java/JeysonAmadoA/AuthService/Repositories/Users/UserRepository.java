@@ -16,4 +16,5 @@ public interface UserRepository extends BaseRepository<UserEntity, Long> {
     @Query("SELECT u FROM UserEntity u WHERE u.name LIKE %:searchTerm% OR u.lastName LIKE %:searchTerm%")
     List<UserEntity> findByNameLikeOrLastNameLike(@Param("searchTerm") String searchTerm);
 
+    UserEntity findByEmail(String email);
 }

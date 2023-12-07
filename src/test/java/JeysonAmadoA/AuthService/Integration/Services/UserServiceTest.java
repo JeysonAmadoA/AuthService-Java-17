@@ -9,7 +9,7 @@ import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
 import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
-import JeysonAmadoA.AuthService.Service.Users.UserService;
+import JeysonAmadoA.AuthService.Services.Users.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

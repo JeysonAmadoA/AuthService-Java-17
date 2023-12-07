@@ -1,4 +1,4 @@
-package JeysonAmadoA.AuthService.Service.Users;
+package JeysonAmadoA.AuthService.Services.Users;
 
 import JeysonAmadoA.AuthService.Entities.Users.UserHasRolesEntity;
 import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;

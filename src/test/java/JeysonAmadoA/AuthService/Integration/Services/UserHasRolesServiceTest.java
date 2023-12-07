@@ -3,7 +3,7 @@ package JeysonAmadoA.AuthService.Integration.Services;
 import JeysonAmadoA.AuthService.Entities.Users.UserHasRolesEntity;
 import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
 import JeysonAmadoA.AuthService.Repositories.Users.UserHasRolesRepository;
-import JeysonAmadoA.AuthService.Service.Users.UserHasRoleService;
+import JeysonAmadoA.AuthService.Services.Users.UserHasRoleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
