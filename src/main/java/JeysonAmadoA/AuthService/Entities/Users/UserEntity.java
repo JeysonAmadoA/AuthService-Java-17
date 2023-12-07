@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -38,5 +40,14 @@ public class UserEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
+
+    public int getAge(){
+        LocalDateTime actualDateTime = LocalDateTime.now();
+
+        LocalDate actualDate = actualDateTime.toLocalDate();
+        LocalDate birthDayDate = this.getBirthDay().toLocalDate();
+
+        return Period.between(birthDayDate, actualDate).getYears();
+    }
 
 }
