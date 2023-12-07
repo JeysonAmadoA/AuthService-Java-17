@@ -44,7 +44,6 @@ public class UserEntity extends BaseEntity {
     public int getAge(){
         LocalDateTime actualDateTime = LocalDateTime.now();
         LocalDate actualDate = actualDateTime.toLocalDate();
-
         return Period.between(this.getBirthDay(), actualDate).getYears();
     }
 

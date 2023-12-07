@@ -36,12 +36,9 @@ public class UserRepositoryTest {
         LocalDate date = LocalDate.now();
 
         UserEntity user = UserEntity.builder()
-                .name("Jeyson")
-                .lastName("Amado")
-                .birthDay(date)
-                .password("password")
-                .email("jeyson@example.com")
-                .build();
+                .name("Jeyson").lastName("Amado")
+                .birthDay(date).password("password")
+                .email("jeyson@example.com").build();
 
         UserEntity userCreated = this.userRepo.save(user);
         assertNotNull(userCreated);
