@@ -11,6 +11,9 @@ import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -112,6 +115,17 @@ public class UserService implements UserServiceInterface {
         } catch (Exception e){
             throw new DeleteUserException(e.getMessage());
         }
+    }
+
+    public UserDetailsService getUserDetailsService(){
+
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+                return userRepo.findByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+            }
+        };
     }
 
 

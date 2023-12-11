@@ -11,8 +11,6 @@ public class RegisterUserDto {
 
     private String lastName;
 
-    private int age;
-
     private LocalDate birthDay;
 
     private String password;
