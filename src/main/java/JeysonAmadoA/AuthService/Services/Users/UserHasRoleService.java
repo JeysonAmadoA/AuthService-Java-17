@@ -4,7 +4,9 @@ import JeysonAmadoA.AuthService.Entities.Users.UserHasRolesEntity;
 import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
 import JeysonAmadoA.AuthService.Interfaces.Services.UserHasRoleServiceInterface;
 import JeysonAmadoA.AuthService.Repositories.Users.UserHasRolesRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserHasRoleService implements UserHasRoleServiceInterface {
 
     private final UserHasRolesRepository userHasRolesRepo;

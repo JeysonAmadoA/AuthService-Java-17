@@ -17,8 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static JeysonAmadoA.AuthService.Entities.Users.RoleEntity.ADMIN_ROLE;
-import static JeysonAmadoA.AuthService.Entities.Users.RoleEntity.CUSTOMER_ROLE;
+import static JeysonAmadoA.AuthService.Entities.Users.RoleEntity.*;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
@@ -42,7 +41,6 @@ public class SecurityConfig {
                         authorize.requestMatchers(antMatcher("/auth/*")).permitAll()
                                 .requestMatchers(antMatcher("/h2-console/*")).permitAll()
                                 .requestMatchers(antMatcher("/users/*")).hasAuthority(ADMIN_ROLE)
-                                .requestMatchers(antMatcher("/users/update")).hasAnyAuthority(ADMIN_ROLE, CUSTOMER_ROLE)
                                 .anyRequest().authenticated())
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

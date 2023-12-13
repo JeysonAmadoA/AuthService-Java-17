@@ -1,10 +1,8 @@
 package JeysonAmadoA.AuthService.Integration.Services;
 
-import JeysonAmadoA.AuthService.Dto.Auth.RegisterUserDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
-import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
 import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -39,28 +36,28 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    @Test
-    public void registerUserTest() throws RegisterUserException {
-
-        RegisterUserDto registerUserDto = new RegisterUserDto();
-        registerUserDto.setPassword("Password");
-
-        UserDto userDto = new UserDto();
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setPassword("Password");
-
-        when(this.registerUserMapper.toEntity(any(RegisterUserDto.class))).thenReturn(userEntity);
-        when(this.userRepo.save(any(UserEntity.class))).thenReturn(userEntity);
-        when(this.userMapper.toDto(any(UserEntity.class))).thenReturn(userDto);
-
-        UserDto userRegistered = this.userService.registerUser(registerUserDto);
-
-        verify(this.registerUserMapper, times(1)).toEntity(registerUserDto);
-        verify(this.userRepo, times(1)).save(userEntity);
-        verify(this.userMapper, times(1)).toDto(userEntity);
-        assertEquals(userDto, userRegistered);
-    }
+//    @Test
+//    public void registerUserTest() throws RegisterUserException {
+//
+//        RegisterUserDto registerUserDto = new RegisterUserDto();
+//        registerUserDto.setPassword("Password");
+//
+//        UserDto userDto = new UserDto();
+//
+//        UserEntity userEntity = new UserEntity();
+//        userEntity.setPassword("Password");
+//
+//        when(this.registerUserMapper.toEntity(any(RegisterUserDto.class))).thenReturn(userEntity);
+//        when(this.userRepo.save(any(UserEntity.class))).thenReturn(userEntity);
+//        when(this.userMapper.toDto(any(UserEntity.class))).thenReturn(userDto);
+//
+//        UserDto userRegistered = this.userService.registerUser(registerUserDto);
+//
+//        verify(this.registerUserMapper, times(1)).toEntity(registerUserDto);
+//        verify(this.userRepo, times(1)).save(userEntity);
+//        verify(this.userMapper, times(1)).toDto(userEntity);
+//        assertEquals(userDto, userRegistered);
+//    }
 
     @Test
     public void getUserByIdTest(){

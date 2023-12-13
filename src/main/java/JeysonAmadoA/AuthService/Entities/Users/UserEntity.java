@@ -1,7 +1,6 @@
 package JeysonAmadoA.AuthService.Entities.Users;
 
 import JeysonAmadoA.AuthService.Entities.BaseEntity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,17 +15,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Where(clause = "deleted_at is NULL")
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 public class UserEntity extends BaseEntity implements UserDetails {
 
     @NotNull(message = "Debe ingresar un nombre")
@@ -54,10 +54,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_has_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleEntity> roles;
+    @JoinTable(
+            name = "user_has_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<RoleEntity> roles = new HashSet<>();
 
     public int getAge(){
         LocalDateTime actualDateTime = LocalDateTime.now();
@@ -98,4 +99,16 @@ public class UserEntity extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + getId() +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles.toString() +
+                '}';
+    }
+
 }

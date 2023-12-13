@@ -1,20 +1,15 @@
 package JeysonAmadoA.AuthService.Services.Users;
 
-import JeysonAmadoA.AuthService.Dto.Auth.RegisterUserDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
-import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
 import JeysonAmadoA.AuthService.Interfaces.Services.UserServiceInterface;
-import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,33 +20,13 @@ public class UserService implements UserServiceInterface {
 
     private final UserMapper userMapper;
 
-    private final RegisterUserMapper registerUserMapper;
-
     private final UserRepository userRepo;
 
+
     @Autowired
-    public UserService(UserMapper userMapper, RegisterUserMapper registerUserMapper, UserRepository userRepo) {
+    public UserService(UserMapper userMapper, UserRepository userRepo) {
         this.userMapper = userMapper;
-        this.registerUserMapper = registerUserMapper;
         this.userRepo = userRepo;
-    }
-
-
-    @Override
-    public UserDto registerUser(RegisterUserDto registerUserDto) throws RegisterUserException {
-        UserEntity userRegistered;
-        try {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String encryptedPassword = encoder.encode(registerUserDto.getPassword());
-
-            UserEntity newUser = this.registerUserMapper.toEntity(registerUserDto);
-            newUser.setPassword(encryptedPassword);
-            newUser.commitCreate();
-            userRegistered = this.userRepo.save(newUser);
-        } catch (Exception e) {
-            throw new RegisterUserException(e.getMessage());
-        }
-        return this.userMapper.toDto(userRegistered);
     }
 
     @Override
@@ -119,13 +94,8 @@ public class UserService implements UserServiceInterface {
 
     public UserDetailsService getUserDetailsService(){
 
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                return userRepo.findByEmail(email)
-                        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-            }
-        };
+        return email -> userRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
     }
 
 

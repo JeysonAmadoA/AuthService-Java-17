@@ -1,6 +1,8 @@
 package JeysonAmadoA.AuthService.Integration.Repositories;
 
+import JeysonAmadoA.AuthService.Entities.Users.RoleEntity;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
+import JeysonAmadoA.AuthService.Repositories.Users.RoleRepository;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -15,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -23,9 +27,12 @@ public class UserRepositoryTest {
 
     private final UserRepository userRepo;
 
+    private final RoleRepository roleRepo;
+
     @Autowired
-    public UserRepositoryTest(UserRepository userRepo) {
+    public UserRepositoryTest(UserRepository userRepo, RoleRepository roleRepo) {
         this.userRepo = userRepo;
+        this.roleRepo = roleRepo;
     }
 
     @Test
@@ -34,11 +41,22 @@ public class UserRepositoryTest {
     public void saveUserTest() {
 
         LocalDate date = LocalDate.now();
+        RoleEntity adminRol = new RoleEntity();
+        adminRol.setName("A");
+
+        RoleEntity customerRol = new RoleEntity();
+        customerRol.setName("B");
+
+
+        Set<RoleEntity> userHasRoles = new HashSet<>();
+        userHasRoles.add(adminRol);
+        userHasRoles.add(customerRol);
+        roleRepo.saveAll(userHasRoles);
 
         UserEntity user = UserEntity.builder()
                 .name("Jeyson").lastName("Amado")
                 .birthDay(date).password("password")
-                .email("jeyson@example.com").build();
+                .email("jeyson@example.com").roles(userHasRoles).build();
 
         UserEntity userCreated = this.userRepo.save(user);
         assertNotNull(userCreated);

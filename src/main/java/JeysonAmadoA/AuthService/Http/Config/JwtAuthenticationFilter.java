@@ -39,8 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        if ((!StringUtils.isEmpty(authHeader)) ||
-            !org.apache.commons.lang3.StringUtils.startsWith(authHeader, "Bearer ")){
+        if (authHeader == null ||
+            !org.apache.commons.lang3.StringUtils.startsWith(authHeader, "Bearer")){
 
             filterChain.doFilter(request, response);
             return;
@@ -50,7 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if ((!StringUtils.isEmpty(userEmail)) || SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userService.getUserDetailsService().loadUserByUsername(userEmail);
-
             if (jwtService.isTokenValid(jwt, userDetails)){
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 

@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

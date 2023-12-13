@@ -9,8 +9,11 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import JeysonAmadoA.AuthService.Utilities.Security.EnvironmentValues;
+
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -18,17 +21,28 @@ import java.util.function.Function;
 public class JWTService implements JWTServiceInterface {
 
     public String extractUsername(String token){
+
         return extractClaim(token, Claims::getSubject);
     }
 
     public String generateToken(UserDetails user){
-
         return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails user) {
+        return Jwts.builder()
+                .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(90)))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
@@ -49,15 +63,14 @@ public class JWTService implements JWTServiceInterface {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
     private Key getSigningKey() {
-        byte[] key = Decoders.BASE64.decode("TRIJU");
+        EnvironmentValues environmentValues = EnvironmentValues.getInstance();
+        byte[] key = Decoders.BASE64.decode(environmentValues.SECRET_KEY());
         return Keys.hmacShaKeyFor(key);
     }
-
-
 
 }

@@ -1,17 +1,13 @@
 package JeysonAmadoA.AuthService.Interfaces.Services;
 
-import JeysonAmadoA.AuthService.Dto.Auth.RegisterUserDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
-import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface UserServiceInterface {
-
-    UserDto registerUser(RegisterUserDto registerUserDto) throws RegisterUserException;
 
     UserDto getUserById(Long userId);
 
