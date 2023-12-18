@@ -22,11 +22,7 @@ import java.util.function.Function;
 @Service
 public class JWTService implements JWTServiceInterface {
 
-
-
     public String generateToken(UserEntity user){
-
-
         return Jwts.builder()
                 .setClaims(generateExtraClaims(user))
                 .setSubject(user.getUsername())

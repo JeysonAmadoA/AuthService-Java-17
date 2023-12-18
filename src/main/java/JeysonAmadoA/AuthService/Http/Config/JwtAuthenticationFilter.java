@@ -1,8 +1,10 @@
 package JeysonAmadoA.AuthService.Http.Config;
 
+import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Interfaces.Services.Security.JWTServiceInterface;
 import JeysonAmadoA.AuthService.Interfaces.Services.Users.UserServiceInterface;
+import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,14 +42,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.split(" ")[1];
+
         String userEmail = jwtService.extractUsername(jwt);
         UserEntity user = userService.getUserByEmail(userEmail);
 
         if (user != null && jwtService.isTokenValid(jwt, user)){
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userEmail, null, user.getAuthorities()
-            );
+            UserDto userData = (new UserMapper()).toDto(user);
 
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userEmail, userData, user.getAuthorities()
+            );
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 

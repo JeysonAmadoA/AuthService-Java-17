@@ -41,7 +41,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         try {
             JwtAuthenticationDto jwtAuthentication = authService.loginUser(loginDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthentication);
+            return ResponseEntity.status(HttpStatus.OK).body(jwtAuthentication);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

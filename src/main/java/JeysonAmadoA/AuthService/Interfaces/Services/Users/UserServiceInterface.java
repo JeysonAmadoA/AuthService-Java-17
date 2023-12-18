@@ -4,7 +4,6 @@ import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
@@ -23,4 +22,5 @@ public interface UserServiceInterface {
     boolean deleteUser(Long userId) throws DeleteUserException;
 
     UserEntity getUserByEmail(String userEmail);
+
 }

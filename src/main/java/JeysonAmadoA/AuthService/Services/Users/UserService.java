@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static JeysonAmadoA.AuthService.Helpers.AuthHelper.getUserWhoActingId;
+
 @Service
 public class UserService implements UserServiceInterface {
 
@@ -63,7 +65,7 @@ public class UserService implements UserServiceInterface {
             UserEntity userFound = this.userRepo.findById(userId).orElse(null);
             if (userFound != null){
                 userUpdated = this.userMapper.update(userFound, userDto);
-                userUpdated.commitUpdate();
+                userUpdated.commitUpdate(getUserWhoActingId());
                 this.userRepo.save(userUpdated);
             }
             else return null;
@@ -78,7 +80,7 @@ public class UserService implements UserServiceInterface {
         try {
             UserEntity userFound = this.userRepo.findById(userId).orElse(null);
             if (userFound != null){
-                userFound.commitDelete();
+                userFound.commitDelete(getUserWhoActingId());
                 this.userRepo.save(userFound);
                 return true;
             }
