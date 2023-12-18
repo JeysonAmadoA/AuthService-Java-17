@@ -26,8 +26,7 @@ public class UserMapperTest {
         UserDto userDto = new UserDto();
         userDto.setName("Jeyson");
         userDto.setLastName("Amado");
-        LocalDate date = LocalDate.now();
-        userDto.setBirthDay(date);
+        userDto.setBirthDay(LocalDate.now());
         userDto.setEmail("jeyson@example.com");
 
         UserEntity user = this.userMapper.toEntity(userDto);
@@ -66,7 +65,7 @@ public class UserMapperTest {
         UserDto userDto = new UserDto();
         userDto.setName("Jeyson");
         userDto.setLastName("Amado");
-        userDto.setBirthDay(date);
+        userDto.setBirthDay(LocalDate.now());
         userDto.setEmail("jeyson@example.com");
 
         UserEntity userUpdated = this.userMapper.update(user, userDto);

@@ -4,12 +4,10 @@ import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
-import JeysonAmadoA.AuthService.Interfaces.Services.UserServiceInterface;
+import JeysonAmadoA.AuthService.Interfaces.Services.Users.UserServiceInterface;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +19,6 @@ public class UserService implements UserServiceInterface {
     private final UserMapper userMapper;
 
     private final UserRepository userRepo;
-
 
     @Autowired
     public UserService(UserMapper userMapper, UserRepository userRepo) {
@@ -44,7 +41,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<UserDto> getUsersByEmail(String email) {
+    public List<UserDto> filterUsersByEmail(String email) {
         List<UserEntity> usersByEmail = this.userRepo.findByEmailLike(email);
         return usersByEmail.stream()
                 .map(userMapper::toDto)
@@ -52,7 +49,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<UserDto> getUsersByNameOrLastname(String entrySearch) {
+    public List<UserDto> filterUsersByNameOrLastname(String entrySearch) {
         List<UserEntity> usersByName = this.userRepo.findByNameLikeOrLastNameLike(entrySearch);
         return usersByName.stream()
                 .map(userMapper::toDto)
@@ -92,10 +89,9 @@ public class UserService implements UserServiceInterface {
         }
     }
 
-    public UserDetailsService getUserDetailsService(){
-
-        return email -> userRepo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    @Override
+    public UserEntity getUserByEmail(String userEmail) {
+        return this.userRepo.findByEmail(userEmail).orElse(null);
     }
 
 

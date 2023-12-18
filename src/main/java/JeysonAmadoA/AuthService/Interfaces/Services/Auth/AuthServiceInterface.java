@@ -1,4 +1,4 @@
-package JeysonAmadoA.AuthService.Interfaces.Auth;
+package JeysonAmadoA.AuthService.Interfaces.Services.Auth;
 
 import JeysonAmadoA.AuthService.Dto.Auth.JwtAuthenticationDto;
 import JeysonAmadoA.AuthService.Dto.Auth.LoginDto;

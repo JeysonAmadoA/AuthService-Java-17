@@ -1,9 +1,8 @@
-package JeysonAmadoA.AuthService.Integration.Repositories;
+package JeysonAmadoA.AuthService.Integration.Repositories.Users;
 
-import JeysonAmadoA.AuthService.Entities.Users.RoleEntity;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
-import JeysonAmadoA.AuthService.Repositories.Users.RoleRepository;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
+import JeysonAmadoA.AuthService.Utilities.Security.Role;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -12,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -27,12 +24,9 @@ public class UserRepositoryTest {
 
     private final UserRepository userRepo;
 
-    private final RoleRepository roleRepo;
-
     @Autowired
-    public UserRepositoryTest(UserRepository userRepo, RoleRepository roleRepo) {
+    public UserRepositoryTest(UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.roleRepo = roleRepo;
     }
 
     @Test
@@ -41,22 +35,11 @@ public class UserRepositoryTest {
     public void saveUserTest() {
 
         LocalDate date = LocalDate.now();
-        RoleEntity adminRol = new RoleEntity();
-        adminRol.setName("A");
-
-        RoleEntity customerRol = new RoleEntity();
-        customerRol.setName("B");
-
-
-        Set<RoleEntity> userHasRoles = new HashSet<>();
-        userHasRoles.add(adminRol);
-        userHasRoles.add(customerRol);
-        roleRepo.saveAll(userHasRoles);
 
         UserEntity user = UserEntity.builder()
                 .name("Jeyson").lastName("Amado")
                 .birthDay(date).password("password")
-                .email("jeyson@example.com").roles(userHasRoles).build();
+                .email("jeyson@example.com").role(Role.ADMIN).build();
 
         UserEntity userCreated = this.userRepo.save(user);
         assertNotNull(userCreated);

@@ -6,11 +6,12 @@ import JeysonAmadoA.AuthService.Dto.Auth.RegisterUserDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.RegisterUserException;
-import JeysonAmadoA.AuthService.Interfaces.Auth.AuthServiceInterface;
+import JeysonAmadoA.AuthService.Interfaces.Services.Auth.AuthServiceInterface;
 import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import JeysonAmadoA.AuthService.Services.Security.JWTService;
+import JeysonAmadoA.AuthService.Utilities.Security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,6 +53,7 @@ public class AuthService implements AuthServiceInterface {
 
             UserEntity newUser = this.registerUserMapper.toEntity(registerUserDto);
             newUser.setPassword(encryptedPassword);
+            newUser.setRole(Role.CUSTOMER);
             newUser.commitCreate();
             userRegistered = this.userRepo.save(newUser);
         } catch (Exception e) {
@@ -61,8 +63,11 @@ public class AuthService implements AuthServiceInterface {
     }
 
     public JwtAuthenticationDto loginUser(LoginDto loginDto){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getEmail(), loginDto.getPassword()));
+
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                loginDto.getEmail(), loginDto.getPassword());
+
+        authenticationManager.authenticate(authToken);
 
         UserEntity user = this.userRepo.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));

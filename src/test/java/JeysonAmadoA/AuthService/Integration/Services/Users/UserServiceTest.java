@@ -1,10 +1,9 @@
-package JeysonAmadoA.AuthService.Integration.Services;
+package JeysonAmadoA.AuthService.Integration.Services.Users;
 
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
-import JeysonAmadoA.AuthService.Mappers.Auth.RegisterUserMapper;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import JeysonAmadoA.AuthService.Services.Users.UserService;
@@ -28,39 +27,13 @@ public class UserServiceTest {
     private UserMapper userMapper;
 
     @Mock
-    private RegisterUserMapper registerUserMapper;
-
-    @Mock
     private UserRepository userRepo;
 
     @InjectMocks
     private UserService userService;
 
-//    @Test
-//    public void registerUserTest() throws RegisterUserException {
-//
-//        RegisterUserDto registerUserDto = new RegisterUserDto();
-//        registerUserDto.setPassword("Password");
-//
-//        UserDto userDto = new UserDto();
-//
-//        UserEntity userEntity = new UserEntity();
-//        userEntity.setPassword("Password");
-//
-//        when(this.registerUserMapper.toEntity(any(RegisterUserDto.class))).thenReturn(userEntity);
-//        when(this.userRepo.save(any(UserEntity.class))).thenReturn(userEntity);
-//        when(this.userMapper.toDto(any(UserEntity.class))).thenReturn(userDto);
-//
-//        UserDto userRegistered = this.userService.registerUser(registerUserDto);
-//
-//        verify(this.registerUserMapper, times(1)).toEntity(registerUserDto);
-//        verify(this.userRepo, times(1)).save(userEntity);
-//        verify(this.userMapper, times(1)).toDto(userEntity);
-//        assertEquals(userDto, userRegistered);
-//    }
-
     @Test
-    public void getUserByIdTest(){
+    public void registerUserTest(){
 
         UserEntity user = new UserEntity();
         UserDto userDto = new UserDto();
@@ -126,7 +99,7 @@ public class UserServiceTest {
         when(this.userMapper.toDto(userOne)).thenReturn(userDtoOne);
         when(this.userMapper.toDto(userTwo)).thenReturn(userDtoTwo);
 
-        List<UserDto> allUsers = this.userService.getUsersByEmail("jeyson.amado@example.com");
+        List<UserDto> allUsers = this.userService.filterUsersByEmail("jeyson.amado@example.com");
 
         verify(this.userRepo, times(1)).findByEmailLike("jeyson.amado@example.com");
         verify(this.userMapper, times(1)).toDto(userOne);
@@ -150,7 +123,7 @@ public class UserServiceTest {
         when(this.userMapper.toDto(userOne)).thenReturn(userDtoOne);
         when(this.userMapper.toDto(userTwo)).thenReturn(userDtoTwo);
 
-        List<UserDto> allUsers = this.userService.getUsersByNameOrLastname("jeyson.amado@example.com");
+        List<UserDto> allUsers = this.userService.filterUsersByNameOrLastname("jeyson.amado@example.com");
 
         verify(this.userRepo, times(1)).findByNameLikeOrLastNameLike("jeyson.amado@example.com");
         verify(this.userMapper, times(1)).toDto(userOne);

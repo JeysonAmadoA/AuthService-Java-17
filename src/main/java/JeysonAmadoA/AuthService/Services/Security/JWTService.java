@@ -1,7 +1,10 @@
 package JeysonAmadoA.AuthService.Services.Security;
 
-import JeysonAmadoA.AuthService.Interfaces.Security.JWTServiceInterface;
+import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
+import JeysonAmadoA.AuthService.Interfaces.Services.Security.JWTServiceInterface;
+import JeysonAmadoA.AuthService.Utilities.Security.EnvironmentValues;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -9,10 +12,9 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import JeysonAmadoA.AuthService.Utilities.Security.EnvironmentValues;
-
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -20,16 +22,17 @@ import java.util.function.Function;
 @Service
 public class JWTService implements JWTServiceInterface {
 
-    public String extractUsername(String token){
 
-        return extractClaim(token, Claims::getSubject);
-    }
 
-    public String generateToken(UserDetails user){
+    public String generateToken(UserEntity user){
+
+
         return Jwts.builder()
+                .setClaims(generateExtraClaims(user))
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -45,9 +48,23 @@ public class JWTService implements JWTServiceInterface {
 
     }
 
+    public String extractUsername(String token){
+        return extractAllClaims(token).getSubject();
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private Map<String, Object> generateExtraClaims(UserEntity user){
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", user.getId());
+        extraClaims.put("name", user.getName());
+        extraClaims.put("role", user.getRole().name());
+        extraClaims.put("permissions", user.getAuthorities());
+
+        return extraClaims;
     }
 
     private boolean isTokenExpired(String token) {

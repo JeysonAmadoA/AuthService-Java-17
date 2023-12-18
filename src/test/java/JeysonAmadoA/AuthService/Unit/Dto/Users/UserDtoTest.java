@@ -11,11 +11,12 @@ public class UserDtoTest {
     @Test
     public void settersAndGettersTest(){
 
+        LocalDate date = LocalDate.now();
+
         UserDto user = new UserDto();
         user.setName("Jeyson");
         user.setLastName("Amado");
-        LocalDate date = LocalDate.now();
-        user.setBirthDay(date);
+        user.setBirthDay(LocalDate.now());
         user.setEmail("jeyson@example.com");
 
         assertEquals("Jeyson", user.getName());
