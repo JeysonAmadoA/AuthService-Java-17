@@ -1,5 +1,6 @@
 package JeysonAmadoA.AuthService.Interfaces.Services.Users;
 
+import JeysonAmadoA.AuthService.Dto.Users.UpdatePasswordDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
@@ -18,6 +19,8 @@ public interface UserServiceInterface {
     List<UserDto> filterUsersByNameOrLastname(String entrySearch);
 
     UserDto updateUser(UserDto userDto, Long userId) throws UpdateUserException;
+
+    UserDto updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) throws UpdateUserException;
 
     boolean deleteUser(Long userId) throws DeleteUserException;
 

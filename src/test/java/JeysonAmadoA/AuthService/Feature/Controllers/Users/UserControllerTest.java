@@ -1,5 +1,6 @@
 package JeysonAmadoA.AuthService.Feature.Controllers.Users;
 
+import JeysonAmadoA.AuthService.Dto.Users.UpdatePasswordDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
 import JeysonAmadoA.AuthService.Exceptions.UpdateUserException;
@@ -123,6 +124,52 @@ public class UserControllerTest {
         verify(userService, times(1)).updateUser(userResult, userToUpdate);
         assertNotNull(response);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void changePasswordTest() throws UpdateUserException {
+
+        UserDto userResult = new UserDto();
+        UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto();
+
+        when(userService.updatePassword(any(UpdatePasswordDto.class), anyLong())).thenReturn(userResult);
+
+        ResponseEntity<String> response = userController.changePassword(1L, updatePasswordDto);
+
+        verify(userService, times(1)).updatePassword(updatePasswordDto, 1L);
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Contraseña actualizada con exito", response.getBody());
+    }
+
+    @Test
+    public void changePasswordNotFoundTest() throws UpdateUserException {
+
+        UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto();
+
+        when(userService.updatePassword(any(UpdatePasswordDto.class), anyLong())).thenReturn(null);
+
+        ResponseEntity<String> response = userController.changePassword(1L, updatePasswordDto);
+
+        verify(userService, times(1)).updatePassword(updatePasswordDto, 1L);
+        assertNotNull(response);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void changePasswordFailTest() throws UpdateUserException {
+
+        UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto();
+
+        when(userService.updatePassword(any(UpdatePasswordDto.class), anyLong()))
+                .thenThrow(new UpdateUserException("No coincide con la contraseña actual"));
+
+        ResponseEntity<String> response = userController.changePassword(1L, updatePasswordDto);
+
+        verify(userService, times(1)).updatePassword(updatePasswordDto, 1L);
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Error al actualizar usuario. No coincide con la contraseña actual", response.getBody());
     }
 
     @Test

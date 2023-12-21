@@ -6,8 +6,21 @@ import java.util.List;
 
 public enum Role {
 
-    ADMIN(Arrays.asList(Permission.UPDATE_USERS, Permission.DELETE_USERS, Permission.GET_USERS)),
-    CUSTOMER(Arrays.asList(Permission.UPDATE_USERS));
+    ADMIN(
+            Arrays.asList(
+                    Permission.UPDATE_USERS,
+                    Permission.DELETE_USERS,
+                    Permission.GET_ALL_USERS,
+                    Permission.GET_ONE_USER
+            )
+    ),
+
+    CUSTOMER(
+            Arrays.asList(
+                    Permission.UPDATE_USERS,
+                    Permission.GET_ONE_USER
+            )
+    );
 
     private List<Permission> permissions;
 

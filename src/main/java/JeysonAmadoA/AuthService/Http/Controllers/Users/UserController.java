@@ -1,5 +1,6 @@
 package JeysonAmadoA.AuthService.Http.Controllers.Users;
 
+import JeysonAmadoA.AuthService.Dto.Users.UpdatePasswordDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Interfaces.Services.Users.UserServiceInterface;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,19 @@ public class UserController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/update/password/{id}")
+    public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestBody UpdatePasswordDto updatePasswordDto) {
+        try {
+            UserDto updatedUser = this.userService.updatePassword(updatePasswordDto, id);
+            return updatedUser != null
+                    ? ResponseEntity.status(HttpStatus.OK).body("Contraseña actualizada con exito")
+                    : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

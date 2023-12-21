@@ -1,5 +1,6 @@
 package JeysonAmadoA.AuthService.Services.Users;
 
+import JeysonAmadoA.AuthService.Dto.Users.UpdatePasswordDto;
 import JeysonAmadoA.AuthService.Dto.Users.UserDto;
 import JeysonAmadoA.AuthService.Entities.Users.UserEntity;
 import JeysonAmadoA.AuthService.Exceptions.DeleteUserException;
@@ -8,7 +9,10 @@ import JeysonAmadoA.AuthService.Interfaces.Services.Users.UserServiceInterface;
 import JeysonAmadoA.AuthService.Mappers.Users.UserMapper;
 import JeysonAmadoA.AuthService.Repositories.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static JeysonAmadoA.AuthService.Helpers.UserHelper.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,21 +34,21 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public UserDto getUserById(Long userId) {
-        UserEntity userFound = this.userRepo.findById(userId).orElse(null);
+        UserEntity userFound = userRepo.findById(userId).orElse(null);
         return userFound != null ? userMapper.toDto(userFound) : null;
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<UserEntity> allUsers = this.userRepo.findAll();
+        List<UserEntity> allUsers = userRepo.findAll();
         return allUsers.stream()
-                .map(this.userMapper::toDto)
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<UserDto> filterUsersByEmail(String email) {
-        List<UserEntity> usersByEmail = this.userRepo.findByEmailLike(email);
+        List<UserEntity> usersByEmail = userRepo.findByEmailLike(email);
         return usersByEmail.stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
@@ -52,7 +56,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public List<UserDto> filterUsersByNameOrLastname(String entrySearch) {
-        List<UserEntity> usersByName = this.userRepo.findByNameLikeOrLastNameLike(entrySearch);
+        List<UserEntity> usersByName = userRepo.findByNameLikeOrLastNameLike(entrySearch);
         return usersByName.stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
@@ -62,11 +66,32 @@ public class UserService implements UserServiceInterface {
     public UserDto updateUser(UserDto userDto, Long userId) throws UpdateUserException {
         UserEntity userUpdated;
         try {
-            UserEntity userFound = this.userRepo.findById(userId).orElse(null);
+            UserEntity userFound = userRepo.findById(userId).orElse(null);
             if (userFound != null){
-                userUpdated = this.userMapper.update(userFound, userDto);
+                userUpdated = userMapper.update(userFound, userDto);
                 userUpdated.commitUpdate(getUserWhoActingId());
-                this.userRepo.save(userUpdated);
+                userRepo.save(userUpdated);
+            }
+            else return null;
+        } catch (Exception e){
+            throw new UpdateUserException(e.getMessage());
+        }
+        return userMapper.toDto(userUpdated);
+    }
+
+    @Override
+    public UserDto updatePassword(UpdatePasswordDto updatePasswordDto, Long userId) throws UpdateUserException {
+        UserEntity userUpdated;
+        try {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            UserEntity userFound = userRepo.findById(userId).orElse(null);
+            if (userFound != null &&
+                verifyOldPassword(updatePasswordDto.getPassword(), userFound.getPassword(), encoder)){
+                verifyNewPassword(updatePasswordDto);
+                String newPasswordEncoded = encoder.encode(updatePasswordDto.getNewPassword());
+                userFound.setPassword(newPasswordEncoded);
+                userFound.commitUpdate(getUserWhoActingId());
+                userUpdated = userRepo.save(userFound);
             }
             else return null;
         } catch (Exception e){
@@ -78,10 +103,10 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean deleteUser(Long userId) throws DeleteUserException {
         try {
-            UserEntity userFound = this.userRepo.findById(userId).orElse(null);
+            UserEntity userFound = userRepo.findById(userId).orElse(null);
             if (userFound != null){
                 userFound.commitDelete(getUserWhoActingId());
-                this.userRepo.save(userFound);
+                userRepo.save(userFound);
                 return true;
             }
             else return false;
@@ -93,7 +118,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public UserEntity getUserByEmail(String userEmail) {
-        return this.userRepo.findByEmail(userEmail).orElse(null);
+        return userRepo.findByEmail(userEmail).orElse(null);
     }
 
 
